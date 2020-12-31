@@ -31,7 +31,7 @@ def email():
         email=request.form['message']
         content="email from "+ name +" and message is "+ email
         to="beherakhirod015@gmail.com"
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server = smtplib.SMTP('smtp.sendgrid.net', 587)
         server.ehlo()
         server.starttls()
         server.login('khirodbehera.bdk@gmail.com', 'Khirod@123')
