@@ -14,16 +14,6 @@ def index():
 
   return render_template( 'chatapp.html' )
 
-@app.route( '/reg' )
-def reg():
-  if request.method == 'POST':
-    topic = request.form['topic']
-    name=request.form['name']
-    email=request.form['email']
-    print(email)
-    return redirect(url_for("hello",name=name,topic=topic))
-  else:
-    return render_template( 'chatapp.html')
 @app.route( '/email', methods =['GET', 'POST'] )
 def email():
     if request.method == 'POST':
@@ -39,12 +29,6 @@ def email():
         server.close()
 
     return render_template( 'email.html' )
- 
-@app.route( '/topic/<topic>' )
-def hello(topic):
-
-  name = request.args.get('name', None)
-  return render_template( './ChatApp.html',topic=topic,name=name )
 
 
 def messageRecived():
