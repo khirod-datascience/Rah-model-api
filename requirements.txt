@@ -1,4 +1,4 @@
 Flask == 1.1.2
 Flask-SocketIO == 5.0.1
-smtplib == 0.1.1
+smtplib
 gunicorn == 20.0.4
