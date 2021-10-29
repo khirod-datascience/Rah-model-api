@@ -1,3 +1,9 @@
 Flask == 1.1.2
-Flask-SocketIO == 5.0.1
-gevent-websocket == 0.10.1
+flask_restful
+nltk
+scikit-learn
+gunicorn
+pandas
+tensorflow
+keras
+fuzzywuzzy

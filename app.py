@@ -1,43 +1,34 @@
-from flask import Flask, render_template,request,flash, redirect, render_template, \
-     request, url_for,Response, jsonify, send_from_directory
-from flask_socketio import SocketIO, emit
-import smtplib
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Sep 27 12:21:00 2021
 
+@author: Devdarshan
+"""
 
+from flask import Flask, request
+from flask_restful import Resource, Api
+import search_by_definition
+import fuzzy_wuzzy_Search_by_definition
+import next_word_predict
 app = Flask(__name__)
+api = Api(app)
 
-app.config[ 'SECRET_KEY' ] = 'jsbcfsbfjefebw237u3gdbdc'
-socketio = SocketIO( app )
+class predict(Resource):
+    def get(self, query):
+        return {'data': search_by_definition.manual_predict(query)}
 
-@app.route( '/' )
-def index():
+class predict_fuzzywuzzy(Resource):
+    def get(self, query):
+        return {'data': fuzzy_wuzzy_Search_by_definition.search_by_definition_fuzzy_wuzzy(query)}
 
-  return render_template( 'chatapp.html' )
-
-@app.route( '/email', methods =['GET', 'POST'] )
-def email():
-    if request.method == 'POST':
-        name=request.form['name']
-        email=request.form['message']
-        content="email from "+ name +" and message is "+ email
-        to="beherakhirod015@gmail.com"
-        server = smtplib.SMTP('smtp.sendgrid.net', 587)
-        server.ehlo()
-        server.starttls()
-        server.login('khirodbehera.bdk@gmail.com', 'Khirod@123')
-        server.sendmail('khirodbehera.bdk@gmail.com', to, content)
-        server.close()
-
-    return render_template( 'email.html' )
+class predict_nextword(Resource):
+    def get(self, query):
+        return {'data': next_word_predict.predict_next(query)}
 
 
-def messageRecived():
-  print( 'message was received!!!' )
-
-@socketio.on( 'my event' )
-def handle_my_custom_event( json ):
-  print( 'recived my event: ' + str( json ) )
-  socketio.emit( 'my response', json, callback=messageRecived )
+api.add_resource(predict, '/searchByDefinition/<query>')
+api.add_resource(predict_fuzzywuzzy, '/fuzzyWuzzySearchByDefinition/<query>')
+api.add_resource(predict_nextword, '/predictNextWord/<query>')
 
 if __name__ == '__main__':
-  socketio.run( app, debug = True )
+     app.run()
